@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "export NODE_PORT=3300 && next dev -p $NODE_PORT",
+    "dev": "set NODE_PORT=3300 && next dev -p $NODE_PORT",
     "build": "rm -rf .next/server && rm -rf .next/static && next build",
     "build_aws": "rm -rf .next/server && rm -rf .next/static && DEPLOY_TARGET=aws next build",
     "start": "next start",

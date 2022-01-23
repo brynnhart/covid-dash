@@ -104,6 +104,7 @@ function DemoLand() {
 function US() {
   let ussubSets = {
     "Ten Largest": ["CA", "TX", "FL", "NY", "PA", "IL", "OH", "GA", "NC", "MI"],
+    "MA & FL": ["MA", "FL"],
     West: [
       "AK",
       "AZ",
@@ -189,6 +190,7 @@ function US() {
   let knownIssues = [];
   const stateDropdownOptions = [
     "All",
+    "MA & FL",
     "Ten Largest",
     "Never Sheltered",
     "Reopened",

@@ -1,17 +1,14 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { DataFetchContext } from "lib/DataFetchContext";
 import { useRouter } from "next/router";
-import { StatesWithIssues } from "config/USStates";
-import { Col, Row } from "./Grid";
 import _ from "lodash";
-import { StateR0Display } from "./StateR0Display";
 import { ScrollToTopPill } from "./ScrollToTopPill";
 import { RTFooter } from "./RTFooter";
 import RTHeader from "./RTHeader";
 import RTHero from "./RTHero";
 import { Util } from "lib/Util";
+import Constants from "lib/Constants";
 
-const refsByState = {};
 const footerRef = React.createRef();
 const rtRef = React.createRef();
 const heroRef = React.createRef();
@@ -27,6 +24,8 @@ function stateClickHandler(router, stateCode) {
 export function RTOverview(props) {
   let isSmallScreen = props.width <= 768;
   let config = props.config;
+  const [filteredSubareas, setFilteredSubareas] = useState(null);
+  const [r0Data, setR0Data] = useState([]);
 
   // TODO move to Context
   let adminQuery = Util.getQueryParams(document.location.search)["admin"];
@@ -35,6 +34,18 @@ export function RTOverview(props) {
   }
 
   const rtData = useContext(DataFetchContext);
+
+  useEffect(() => {
+    console.log("FIRE!");
+    let filteredR0s = _.filter(rtData.dataSeries, (series, identifier) => {
+      return !filteredSubareas || filteredSubareas.indexOf(identifier) !== -1;
+    });
+    let sortedR0s = _.sortBy(filteredR0s, (state) => {
+      return _.nth(state.series, -1 - Constants.daysOffsetSinceEnd).r0;
+    });
+    setR0Data(sortedR0s);
+  }, [rtData, filteredSubareas]);
+
   let lastUpdated = rtData.modelLastRunDate;
   const [clickedOnState, setClickedOnState] = useState(null);
 
@@ -65,6 +76,7 @@ export function RTOverview(props) {
   }
   let detectedState = Util.getCookie("statecode");
   let router = useRouter();
+
   return (
     <>
       <RTHeader
@@ -93,52 +105,6 @@ export function RTOverview(props) {
               stateClickHandler(router, stateCode);
             }}
           />
-          <Row className="stacked-states-outer">
-            {rtData &&
-              _.map(
-                _.sortBy(
-                  _.keys(rtData.dataSeries),
-                  (state) => config.subAreas[state]
-                ),
-                (state, i) => {
-                  var align;
-                  switch (i % rowCount) {
-                    case 0:
-                      align = "left";
-                      break;
-                    case rowCount - 1:
-                      align = "right";
-                      break;
-                    default:
-                      align = "center";
-                      break;
-                  }
-                  refsByState[state] = refsByState[state] || React.createRef();
-                  return (
-                    <Col
-                      key={state}
-                      size={colsPerChart}
-                      align={align}
-                      offset={align === "center" ? spacerOffset : 0}
-                    >
-                      <div className="stacked-state-wrapper">
-                        <StateR0Display
-                          ref={refsByState[state]}
-                          config={config}
-                          subArea={state}
-                          runID={lastUpdated.getTime()}
-                          hasDataIssue={StatesWithIssues[state]}
-                          highlight={clickedOnState === state}
-                          hasOwnRow={isSmallScreen}
-                          data={rtData.dataSeries[state]}
-                          contentWidth={props.width}
-                        />
-                      </div>
-                    </Col>
-                  );
-                }
-              )}
-          </Row>
         </div>
       </div>
       <RTFooter

@@ -2,6 +2,7 @@
 
 body {
   margin: 0;
+  background-color: #99b8e5;
   font-family: $font-stack;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
@@ -10,6 +11,25 @@ body {
   line-height: 1.5715;
   box-sizing: border-box;
   color: rgba(0, 0, 0, 0.65);
+}
+
+rect {
+  -webkit-filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.1));
+}
+
+button {
+  -webkit-filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.2));
+}
+
+div[class^="StateR0Display__DetailsLink"] {
+  background-color: transparent;
+  padding-top: 6px;
+}
+
+.stacked-state-wrapper {
+  margin-left: 20px;
 }
 
 *,
@@ -122,10 +142,12 @@ a:hover {
 
 .rt-container {
   font-family: $font-stack;
-  padding: 0px 0px;
   max-width: $inner-max-width;
   min-height: 900px;
   margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding-right: 12px;
 }
 
 .rt-container-wrapper {
@@ -279,8 +301,11 @@ a.rt-header-email-link:hover {
 .state-rt-display h1 {
   font-weight: bold;
   font-size: 16px !important;
-  margin: 0em 0 0px 0px !important;
+  margin: 0em 0 -18px 0px !important;
   display: inline-block;
+  background-color: rgba(255, 255, 255, 1);
+  padding: 3px 10px 3px 10px;
+  border-radius: 8px 8px 0 0;
 }
 
 .rt-container-small h1.state-rt-display-stat {
